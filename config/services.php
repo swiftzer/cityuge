@@ -30,7 +30,7 @@ return [
     ],
 
     'stripe' => [
-        'model'  => CityUGE\User::class,
+        'model'  => CityUGE\Entities\User::class,
         'key'    => env('STRIPE_KEY'),
         'secret' => env('STRIPE_SECRET'),
     ],

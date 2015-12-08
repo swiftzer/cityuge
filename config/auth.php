@@ -28,7 +28,7 @@ return [
     |
     */
 
-    'model' => CityUGE\User::class,
+    'model' => CityUGE\Entities\User::class,
 
     /*
     |--------------------------------------------------------------------------
