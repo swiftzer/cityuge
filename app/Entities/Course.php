@@ -12,4 +12,14 @@ class Course extends Model
     {
         return $this->hasMany('CityUGE\Entities\CourseMeta');
     }
+
+    public function department()
+    {
+        return $this->belongsTo('CityUGE\Entities\Department');
+    }
+
+    public function categories()
+    {
+        return $this->belongsToMany('CityUGE\Entities\Category', 'category_course');
+    }
 }
