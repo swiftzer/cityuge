@@ -27,6 +27,7 @@ class CreateCoursesTable extends Migration
             $table->boolean('assessment_quiz')->index();
             $table->boolean('assessment_report')->index();
             $table->boolean('assessment_project')->index();
+            $table->decimal('exam_weight', 5, 4);
             $table->integer('total_comments')->index();
             $table->decimal('mean_gp', 5, 4)->index();
             $table->decimal('mean_workload', 5, 4)->index();
