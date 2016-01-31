@@ -15,8 +15,7 @@ class CreateReviewRemoveStockReasonsTable extends Migration
     {
         Schema::create('review_remove_stock_reasons', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title_zh', 200);
-            $table->string('title_en', 200);
+            $table->string('title', 200);
             $table->text('reason_zh')->nullable();
             $table->text('reason_en')->nullable();
         });
