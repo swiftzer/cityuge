@@ -16,7 +16,6 @@ class CreateCourseAimsStatsTable extends Migration
         Schema::create('course_aims_stats', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('course_id')->unsigned()->index();
-            $table->string('course_code', 10);
             $table->string('semester', 5);
             $table->integer('total_student');
             $table->decimal('mean', 3, 2)->nullable();
