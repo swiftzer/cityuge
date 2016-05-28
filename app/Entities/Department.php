@@ -1,8 +1,6 @@
 <?php
 
-
 namespace CityUGE\Entities;
-
 
 use Illuminate\Database\Eloquent\Model;
 
