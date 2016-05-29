@@ -14,3 +14,5 @@
 Route::get('/', ['as' => 'home', 'uses' => 'HomeController@index']);
 
 Route::get('courses', ['as' => 'courses.index', 'uses' => 'CourseController@index']);
+Route::get('courses/categories/{categorySlug}/{semester?}', ['as' => 'courses.category', 'uses' => 'CourseController@category']);
+    
