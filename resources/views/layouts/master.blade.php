@@ -12,8 +12,10 @@
 <div class="container">
   <h1><a href="{{ route('home') }}">CityU GE Guide</a></h1>
   <nav>
-    <ul>
-      <li><a href="{{ route('courses.index') }}">Courses</a></li>
+    <ul class="list-inline">
+      <li class="list-inline-item"><a href="{{ route('courses.index') }}">Courses</a></li>
+      <li class="list-inline-item"><a href="{{ route('reviews.index') }}">Reviews</a></li>
+      <li class="list-inline-item"><a href="{{ route('departments.index') }}">Departments</a></li>
     </ul>
   </nav>
   <hr>
