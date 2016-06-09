@@ -2,6 +2,7 @@
 
 namespace CityUGE\Providers;
 
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +14,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        // Blade directives
+        // Escape XML
+        Blade::directive('xmle', function ($expression) {
+            return "<?php echo htmlspecialchars({$expression}, ENT_XML1, 'UTF-8'); ?>";
+        });
     }
 
     /**

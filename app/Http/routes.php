@@ -24,3 +24,6 @@ Route::get('departments', ['as' => 'departments.index', 'uses' => 'DepartmentCon
 // Reviews
 Route::get('reviews', ['as' => 'reviews.index', 'uses' => 'ReviewController@index']);
 Route::get('reviews/{review}', ['as' => 'reviews.show', 'uses' => 'ReviewController@show']);
+
+// Atom feed
+Route::get('feed', ['as' => 'feed', 'uses' => 'ReviewController@recentAtomFeed']);
