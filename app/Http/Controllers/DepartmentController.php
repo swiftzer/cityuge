@@ -15,4 +15,11 @@ class DepartmentController extends Controller
 
         return view('main.department.index', ['departments' => $departments]);
     }
+
+    public function courses($initial)
+    {
+        $department = Department::where('initial', $initial)->with('courses')->first();
+        return view('main.department.courses', ['department' => $department]);
+    }
+
 }
