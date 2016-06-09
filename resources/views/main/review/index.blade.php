@@ -12,7 +12,9 @@
       @foreach($reviews as $review)
         <article id="review-{{ $review->id }}">
           <header>
-            <h2>{{ $review->course->course_code }} - {{ $review->course->title_en }}</h2>
+            <h2>
+              {{ $review->course->course_code }} - {{ $review->course->title_en }}
+            </h2>
             <ul>
               <li>Semester: {{ $review->semester }}</li>
               <li>Workload: {{ $review->workload }}</li>
@@ -22,7 +24,10 @@
           </header>
           {!! nl2br(e($review->body)) !!}
           <footer>
-            Posted at <time datetime="{{ $review->created_at->toW3cString() }}">{{ $review->created_at->format('d M Y H:i') }}</time>
+            <a href="{{ route('reviews.show', [$review->id]) }}">Post link</a>
+            Posted at
+            <time
+              datetime="{{ $review->created_at->toW3cString() }}">{{ $review->created_at->format('d M Y H:i') }}</time>
           </footer>
         </article>
         <hr>

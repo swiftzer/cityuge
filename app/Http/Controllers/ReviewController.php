@@ -17,4 +17,9 @@ class ReviewController extends Controller
             ->paginate(30);
         return view('main.review.index', ['reviews' => $reviews]);
     }
+
+    public function show(Review $review)
+    {
+        return view('main.review.show', ['review' => $review]);
+    }
 }
