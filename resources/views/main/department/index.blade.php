@@ -17,7 +17,7 @@
         <tbody>
         @foreach($departments as $department)
           <tr>
-            <td>{{ $department->initial }}</td>
+            <td><a href="{{ route('departments.courses', ['initial' => strtolower($department->initial)]) }}">{{ $department->initial }}</a></td>
             <td>{{ $department->title_en }}</td>
             <td><a href="{{ $department->url }}">{{ $department->url }}</a></td>
           </tr>
