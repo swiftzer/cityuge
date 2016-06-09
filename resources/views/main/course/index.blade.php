@@ -20,7 +20,9 @@
         <tbody>
         @foreach($courses as $course)
           <tr>
-            <td>{{ $course->course_code }}</td>
+            <td>
+              <a href="{{ route('courses.show', [strtolower($course->course_code)]) }}">{{ $course->course_code }}</a>
+            </td>
             <td>{{ $course->title_en }}</td>
             <td>{{ $course->department->initial }}</td>
           </tr>

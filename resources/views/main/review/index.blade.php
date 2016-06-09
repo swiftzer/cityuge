@@ -13,7 +13,9 @@
         <article id="review-{{ $review->id }}">
           <header>
             <h2>
-              {{ $review->course->course_code }} - {{ $review->course->title_en }}
+              <a href="{{ route('courses.show', [strtolower($review->course->course_code)]) }}">
+                {{ $review->course->course_code }} - {{ $review->course->title_en }}
+              </a>
             </h2>
             <ul>
               <li>Semester: {{ $review->semester }}</li>

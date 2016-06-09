@@ -8,6 +8,11 @@ class Course extends Model
 {
     protected $table = 'courses';
 
+    public function getRouteKeyName()
+    {
+        return 'course_code';
+    }
+
     public function meta()
     {
         return $this->hasMany('CityUGE\Entities\CourseMeta');
@@ -22,17 +27,17 @@ class Course extends Model
     {
         return $this->belongsToMany('CityUGE\Entities\Category', 'category_course');
     }
-    
+
     public function reviews()
     {
         return $this->hasMany('CityUGE\Entities\Review');
     }
-    
+
     public function stats()
     {
         return $this->hasMany('CityUGE\Entities\AimsStats');
     }
-    
+
     public function offerings()
     {
         return $this->hasMany('CityUGE\Entities\Offering');
