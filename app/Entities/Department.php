@@ -8,8 +8,13 @@ class Department extends Model
 {
     protected $table = 'departments';
 
+    public function getRouteKeyName()
+    {
+        return 'initial';
+    }
+
     public function courses()
     {
-        return $this->hasMany('CityUGE\Entities\Course');
+        return $this->hasMany(Course::class);
     }
 }

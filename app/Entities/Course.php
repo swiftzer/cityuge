@@ -15,31 +15,31 @@ class Course extends Model
 
     public function meta()
     {
-        return $this->hasMany('CityUGE\Entities\CourseMeta');
+        return $this->hasMany(CourseMeta::class);
     }
 
     public function department()
     {
-        return $this->belongsTo('CityUGE\Entities\Department');
+        return $this->belongsTo(Department::class);
     }
 
     public function categories()
     {
-        return $this->belongsToMany('CityUGE\Entities\Category', 'category_course');
+        return $this->belongsToMany(Category::class, 'category_course');
     }
 
     public function reviews()
     {
-        return $this->hasMany('CityUGE\Entities\Review');
+        return $this->hasMany(Review::class);
     }
 
     public function stats()
     {
-        return $this->hasMany('CityUGE\Entities\AimsStats');
+        return $this->hasMany(AimsStats::class);
     }
 
     public function offerings()
     {
-        return $this->hasMany('CityUGE\Entities\Offering');
+        return $this->hasMany(Offering::class);
     }
 }

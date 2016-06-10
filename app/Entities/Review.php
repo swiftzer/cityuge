@@ -10,7 +10,7 @@ class Review extends Model
 
     public function course()
     {
-        return $this->belongsTo('CityUGE\Entities\Course');
+        return $this->belongsTo(Course::class);
     }
 }
 
