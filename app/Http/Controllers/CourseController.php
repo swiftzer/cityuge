@@ -19,7 +19,7 @@ class CourseController extends Controller
             ->orderBy('course_code')
             ->paginate(30);
 
-        return view('main.course.index', ['courses' => $courses]);
+        return view('main.courses.index', ['courses' => $courses]);
     }
 
     public function category($categorySlug, $semester = null)
@@ -37,7 +37,7 @@ class CourseController extends Controller
             });
         }
         $courses = $coursesQuery->orderBy('course_code')->paginate(30);
-        return view('main.course.index', ['courses' => $courses]);
+        return view('main.courses.index', ['courses' => $courses]);
     }
 
     /**
@@ -59,7 +59,7 @@ class CourseController extends Controller
             'offerings' => $offerings,
             'reviews' => $reviews,
         ];
-        return view('main.course.show', $data);
+        return view('main.courses.show', $data);
     }
 
     private function getCategoryBySlug($categorySlug)

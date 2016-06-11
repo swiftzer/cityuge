@@ -2,10 +2,9 @@
 
 namespace CityUGE\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use CityUGE\Http\Requests;
+use CityUGE\Entities\Course;
 use CityUGE\Entities\Department;
+use CityUGE\Http\Requests;
 
 class DepartmentController extends Controller
 {
@@ -13,13 +12,19 @@ class DepartmentController extends Controller
     {
         $departments = Department::all()->sortBy('initial');
 
-        return view('main.department.index', ['departments' => $departments]);
+        return view('main.departments.index', ['departments' => $departments]);
     }
 
-    public function courses($initial)
+    public function courses(Department $department)
     {
-        $department = Department::where('initial', $initial)->with('courses')->first();
-        return view('main.department.courses', ['department' => $department]);
+        $courses = Course::where('department_id', $department->id)
+            ->orderBy('course_code')
+            ->paginate(30);
+        $data = [
+            'department' => $department,
+            'courses' => $courses,
+        ];
+        return view('main.departments.courses', $data);
     }
 
 }

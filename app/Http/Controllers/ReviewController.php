@@ -16,12 +16,12 @@ class ReviewController extends Controller
         $reviews = Review::with('course')
             ->orderBy('created_at', 'DESC')
             ->paginate(30);
-        return view('main.review.index', ['reviews' => $reviews]);
+        return view('main.reviews.index', ['reviews' => $reviews]);
     }
 
     public function show(Review $review)
     {
-        return view('main.review.show', ['review' => $review]);
+        return view('main.reviews.show', ['review' => $review]);
     }
 
     public function recentAtomFeed()
@@ -40,7 +40,7 @@ class ReviewController extends Controller
             'reviews' => $reviews,
         ];
         return response()
-            ->view('main.review.recentAtom', $data)
+            ->view('main.reviews.recentAtom', $data)
             ->header('Content-Type', 'text/xml');
     }
 }

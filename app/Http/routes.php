@@ -20,7 +20,7 @@ Route::get('courses/{course}', ['as' => 'courses.show', 'uses' => 'CourseControl
 
 // Departments
 Route::get('departments', ['as' => 'departments.index', 'uses' => 'DepartmentController@index']);
-Route::get('departments/{initial}', ['as' => 'departments.courses', 'uses' => 'DepartmentController@courses']);
+Route::get('departments/{department}', ['as' => 'departments.courses', 'uses' => 'DepartmentController@courses']);
 
 // Reviews
 Route::get('reviews', ['as' => 'reviews.index', 'uses' => 'ReviewController@index']);
