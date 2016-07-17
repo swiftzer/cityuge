@@ -18,6 +18,10 @@ Route::get('courses', ['as' => 'courses.index', 'uses' => 'CourseController@inde
 Route::get('courses/categories/{categorySlug}/{semester?}', ['as' => 'courses.category', 'uses' => 'CourseController@category']);
 Route::get('courses/{course}', ['as' => 'courses.show', 'uses' => 'CourseController@show']);
 
+// Search
+Route::get('search', ['as' => 'search.index', 'uses' => 'SearchController@index']);
+Route::get('search/results', ['as' => 'search.results', 'uses' => 'SearchController@results']);
+
 // Departments
 Route::get('departments', ['as' => 'departments.index', 'uses' => 'DepartmentController@index']);
 Route::get('departments/{department}', ['as' => 'departments.courses', 'uses' => 'DepartmentController@courses']);

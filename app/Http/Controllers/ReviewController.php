@@ -1,7 +1,6 @@
 <?php
 namespace CityUGE\Http\Controllers;
 
-
 use Carbon\Carbon;
 use CityUGE\Entities\Review;
 
