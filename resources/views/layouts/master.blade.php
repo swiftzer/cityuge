@@ -10,20 +10,8 @@
 </head>
 <body>
 @include('layouts.nav')
-<div class="container">
-  <h1><a href="{{ route('home') }}">CityU GE Guide</a></h1>
-  <nav>
-    <ul class="list-inline">
-      <li class="list-inline-item"><a href="{{ route('courses.index') }}">Courses</a></li>
-      <li class="list-inline-item"><a href="{{ route('reviews.index') }}">Reviews</a></li>
-      <li class="list-inline-item"><a href="{{ route('departments.index') }}">Departments</a></li>
-      <li class="list-inline-item"><a href="{{ route('feed') }}">Atom feed</a></li>
-    </ul>
-  </nav>
-  <hr>
-</div>
-
 @yield('content')
 <script src="{{ asset('js/app.js') }}"></script>
+@stack('scripts')
 </body>
 </html>

@@ -30,6 +30,7 @@
                     </ul>
                 </li>
                 <li><a href="{{ route('reviews.index') }}">Comments</a></li>
+                <li><a href="{{ route('feed') }}">Feed</a></li>
             </ul>
             
             <form class="navbar-form navbar-right" role="search">
