@@ -24,6 +24,9 @@ class SearchController extends Controller
     public function results(Request $request)
     {
         $filter = new Filter($request->query());
-        return $filter->getQueryBuilder()->paginate(15);
+        return view('main.search.results', [
+            'results' => $filter->getQueryBuilder()->paginate(15),
+            'query' => $request->query->all()
+        ]);
     }
 }
