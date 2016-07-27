@@ -26,7 +26,7 @@
                         <li role="separator" class="divider"></li>
                         <li><a href="#">Foundation</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">Advanced search</a></li>
+                        <li><a href="{{ route('search.index') }}">Advanced search</a></li>
                     </ul>
                 </li>
                 <li><a href="{{ route('reviews.index') }}">Comments</a></li>
