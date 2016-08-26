@@ -16,7 +16,7 @@ class CreateCourseAimsStatsTable extends Migration
         Schema::create('course_aims_stats', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('course_id')->unsigned()->index();
-            $table->string('semester', 5);
+            $table->integer('semester_id')->unsigned()->index();
             $table->integer('total_student');
             $table->decimal('mean', 3, 2)->nullable();
             $table->decimal('median', 3, 2)->nullable();
@@ -24,7 +24,7 @@ class CreateCourseAimsStatsTable extends Migration
             $table->decimal('max', 3, 2)->nullable();
             $table->decimal('min', 3, 2)->nullable();
 
-            $table->unique(['course_id', 'semester']);
+            $table->unique(['course_id', 'semester_id']);
             $table->foreign('course_id')->references('id')->on('courses')->onUpdate('cascade')->onDelete('cascade');
         });
     }

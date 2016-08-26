@@ -16,9 +16,9 @@ class CreateOfferingsTable extends Migration
         Schema::create('offerings', function (Blueprint $table) {
             $table->increments('id')->unsigned();
             $table->integer('course_id')->unsigned();
-            $table->string('semester', 5);
+            $table->integer('semester_id')->unsigned()->index();
 
-            $table->unique(['course_id', 'semester']);
+            $table->unique(['course_id', 'semester_id']);
             $table->foreign('course_id')->references('id')->on('courses')->onUpdate('cascade')->onDelete('cascade');
         });
     }
