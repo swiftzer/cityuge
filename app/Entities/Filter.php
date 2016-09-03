@@ -2,7 +2,8 @@
 
 namespace CityUGE\Entities;
 
-use DB;
+
+use Illuminate\Support\Facades\DB;
 
 class Filter
 {
@@ -13,8 +14,8 @@ class Filter
     private $page;
     // yes / no / don't care
     private $hasExam, $hasQuiz, $hasReport, $hasProject;
-    
-    function __construct($query) 
+
+    function __construct($query)
     {
         $this->setKeyword(array_get($query, 'keyword', ''));
         $this->setSemester(array_get($query, 'semester', ''));
@@ -91,53 +92,37 @@ class Filter
 
     public function getQueryBuilder()
     {
-        $whereClauses = [];
         $queryBuilder = DB::table('courses');
-        if(isset($this->keyword))
-        {
-            $queryBuilder->where(function($q) {
-                $q->where('course_code', $this->keyword);
-                $q->orWhere('title_en', 'like', '%'.$this->keyword.'%');
-                $q->orWhere('title_zh', 'like', '%'.$this->keyword.'%');
+        if (isset($this->keyword)) {
+            $queryBuilder->where(function ($q) {
+                $q->where('course_code', 'like', '%' . $this->keyword . '%');
+                $q->orWhere('title_en', 'like', '%' . $this->keyword . '%');
+                $q->orWhere('title_zh', 'like', '%' . $this->keyword . '%');
             });
         }
-        if(isset($this->department))
-        {
+        if (isset($this->department)) {
             $queryBuilder->where('department_id', $this->department->id);
         }
-        if(isset($this->category))
-        {
-            $queryBuilder->whereExists(function($q) {
-                $q->select(DB::raw(1))
-                ->from('category_course')
-                ->where('category_course.category_id', $this->category->id)
-                ->whereRaw('category_course.course_id = courses.id');
-            });
+        if (isset($this->category)) {
+            $queryBuilder->join('category_course', 'courses.id', '=', 'category_course.course_id')
+                ->where('category_course.category_id', $this->category);
         }
-        if(isset($this->semester))
-        {
-            $queryBuilder->whereExists(function($q) {
-                $q->select(DB::raw(1))
-                ->from('offerings')
-                ->where('offerings.semester', $this->semester)
-                ->whereRaw('offerings.course_id = courses.id');
-            });
+        if (isset($this->semester)) {
+            $queryBuilder->join('offerings', 'courses.id', '=', 'offerings.course_id')
+                ->join('semesters', 'offerings.semester_id', '=', 'semesters.id')
+                ->where('semesters.semester', $this->semester);
         }
-        if(isset($this->hasExam))
-        {
-            $queryBuilder->where('assessment_exam', $this->hasExam?'1':'0');
+        if (isset($this->hasExam)) {
+            $queryBuilder->where('assessment_exam', $this->hasExam ? '1' : '0');
         }
-        if(isset($this->hasQuiz))
-        {
-            $queryBuilder->where('assessment_quiz', $this->hasQuiz?'1':'0');
+        if (isset($this->hasQuiz)) {
+            $queryBuilder->where('assessment_quiz', $this->hasQuiz ? '1' : '0');
         }
-        if(isset($this->hasReport))
-        {
-            $queryBuilder->where('assessment_report', $this->hasReport?'1':'0');
+        if (isset($this->hasReport)) {
+            $queryBuilder->where('assessment_report', $this->hasReport ? '1' : '0');
         }
-        if(isset($this->hasProject))
-        {
-            $queryBuilder->where('assessment_project', $this->hasProject?'1':'0');
+        if (isset($this->hasProject)) {
+            $queryBuilder->where('assessment_project', $this->hasProject ? '1' : '0');
         }
         return $queryBuilder;
     }

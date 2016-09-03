@@ -20,7 +20,7 @@
       <summary type="html">@xmle(str_limit($review->body, 300, '…'))</summary>
       <content type="html">
         &lt;ul&gt;
-          &lt;li&gt;Semester: {{ $review->semester }}&lt;/li&gt;
+          &lt;li&gt;Semester: {{ $review->semester->title }}&lt;/li&gt;
           &lt;li&gt;Workload: {{ $review->workload }}&lt;/li&gt;
           &lt;li&gt;Course grade: {{ $review->grade }}&lt;/li&gt;
           &lt;li&gt;Instructor: {{ $review->instructor }}&lt;/li&gt;

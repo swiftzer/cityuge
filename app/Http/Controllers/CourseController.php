@@ -4,8 +4,8 @@ namespace CityUGE\Http\Controllers;
 
 use CityUGE\Entities\Category;
 use CityUGE\Entities\Course;
-use CityUGE\Entities\Offering;
 use CityUGE\Entities\Review;
+use CityUGE\Semester;
 
 class CourseController extends Controller
 {
@@ -22,21 +22,34 @@ class CourseController extends Controller
         return view('main.courses.index', ['courses' => $courses]);
     }
 
-    public function category($categorySlug, $semester = null)
+    public function category(Category $category, Semester $semester = null)
     {
-        $category = $this->getCategoryBySlug($categorySlug);
-        if (is_null($category)) {
-            abort(404);
-        }
-        $coursesQuery = Course::with('department')->whereHas('categories', function ($query) use ($category) {
-            $query->where('category_id', '=', $category->id);
-        });
+        // Alternative query
+//        $query = DB::table('courses')
+//            ->join('category_course', 'courses.id', '=', 'category_course.course_id')
+//            ->join('categories', 'category_course.category_id', '=', 'categories.id');
+//        if (!is_null($semester)) {
+//            $query->join('offerings', 'courses.id', '=', 'offerings.course_id')
+//                ->join('semesters', 'offerings.semester_id', '=', 'semesters.id');
+//        }
+//        $query->where('categories.slug', $category->slug);
+//        if (!is_null($semester)) {
+//            $query->where('semesters.semester', $semester->semester);
+//        }
+//        $courses = $query->orderBy('course_code')
+//            ->paginate(30);
+
+        $query = Course::with('department')
+            ->whereHas('categories', function ($q) use ($category) {
+                $q->where('slug', $category->slug);
+            });
         if (!is_null($semester)) {
-            $coursesQuery = $coursesQuery->whereHas('offerings', function ($query) use ($semester) {
-                $query->where('semester', '=', $semester);
+            $query->whereHas('semesters', function ($q) use ($semester) {
+                $q->where('semester', $semester->semester);
             });
         }
-        $courses = $coursesQuery->orderBy('course_code')->paginate(30);
+        $courses = $query->orderBy('course_code')
+            ->paginate(30);
         return view('main.courses.index', ['courses' => $courses]);
     }
 
@@ -47,27 +60,17 @@ class CourseController extends Controller
      */
     public function show(Course $course)
     {
-        $reviews = Review::where('course_id', $course->id)
+        $reviews = Review::with('semester')
+            ->where('course_id', $course->id)
             ->orderBy('created_at', 'DESC')
             ->paginate(5);
-        $offerings = Offering::where('course_id', $course->id)
-            ->orderBy('semester', 'DESC')
-            ->get();
+        $offeringSemesters = $course->semesters()->orderBy('id', 'DESC')->get();
 
         $data = [
             'course' => $course,
-            'offerings' => $offerings,
+            'offeringSemesters' => $offeringSemesters,
             'reviews' => $reviews,
         ];
         return view('main.courses.show', $data);
     }
-
-    private function getCategoryBySlug($categorySlug)
-    {
-        $categories = Category::all();
-        return $categories->first(function ($key, $value) use ($categorySlug) {
-            return $value->slug == $categorySlug;
-        });
-    }
-
 }

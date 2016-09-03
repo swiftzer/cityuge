@@ -44,10 +44,10 @@
     </table>
 
     <h2>Offerings</h2>
-    @if (count($offerings) > 0)
+    @if (count($offeringSemesters) > 0)
       <ul class="list-inline">
-        @foreach($offerings as $offering)
-          <li class="list-inline-item">{{ $offering->semester }}</li>
+        @foreach($offeringSemesters as $semester)
+          <li class="list-inline-item">{{ $semester->title }}</li>
         @endforeach
       </ul>
     @else
@@ -65,7 +65,7 @@
           <h3>#{{ $review->id }}</h3>
           <header>
             <ul>
-              <li>Semester: {{ $review->semester }}</li>
+              <li>Semester: {{ $review->semester->title }}</li>
               <li>Workload: {{ $review->workload }}</li>
               <li>Course grade: {{ $review->grade }}</li>
               <li>Instructor: {{ $review->instructor }}</li>

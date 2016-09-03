@@ -16,7 +16,7 @@ class CreateReviewsTable extends Migration
         Schema::create('reviews', function (Blueprint $table) {
             $table->increments('id')->unsigned();
             $table->integer('course_id')->unsigned()->index();
-            $table->string('semester', 5)->index();
+            $table->integer('semester_id')->unsigned()->index();
             $table->string('instructor', 100);
             $table->string('grade', 2)->nullable();
             $table->decimal('gp', 2, 1)->index();
@@ -28,8 +28,10 @@ class CreateReviewsTable extends Migration
             $table->softDeletes();
 
             $table->index('created_at');
+            $table->index('updated_at');
             $table->index('deleted_at');
             $table->foreign('course_id')->references('id')->on('courses')->onUpdate('cascade')->onDelete('cascade');
+            // semester foreign key constraint defined in semester table migration
         });
     }
 

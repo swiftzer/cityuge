@@ -18,7 +18,7 @@
               </a>
             </h2>
             <ul>
-              <li>Semester: {{ $review->semester }}</li>
+              <li>Semester: {{ $review->semester->title }}</li>
               <li>Workload: {{ $review->workload }}</li>
               <li>Course grade: {{ $review->grade }}</li>
               <li>Instructor: {{ $review->instructor }}</li>

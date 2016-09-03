@@ -29,7 +29,7 @@
                         <li><a href="{{ route('search.index') }}">Advanced search</a></li>
                     </ul>
                 </li>
-                <li><a href="{{ route('reviews.index') }}">Comments</a></li>
+                <li><a href="{{ route('reviews.index') }}">Reviews</a></li>
                 <li><a href="{{ route('feed') }}">Feed</a></li>
             </ul>
             

@@ -9,7 +9,7 @@
         <h2>{{ $review->course->course_code }} - {{ $review->course->title_en }}</h2>
         <ul>
           <li>Department: {{ $review->course->department->title_zh }} ({{ $review->course->department->initial }})</li>
-          <li>Semester: {{ $review->semester }}</li>
+          <li>Semester: {{ $review->semester->title }}</li>
           <li>Workload: {{ $review->workload }}</li>
           <li>Course grade: {{ $review->grade }}</li>
           <li>Instructor: {{ $review->instructor }}</li>

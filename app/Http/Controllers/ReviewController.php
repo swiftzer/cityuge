@@ -12,7 +12,7 @@ class ReviewController extends Controller
      */
     public function index()
     {
-        $reviews = Review::with('course')
+        $reviews = Review::with(['course', 'semester'])
             ->orderBy('created_at', 'DESC')
             ->paginate(30);
         return view('main.reviews.index', ['reviews' => $reviews]);
@@ -25,7 +25,7 @@ class ReviewController extends Controller
 
     public function recentAtomFeed()
     {
-        $reviews = Review::with('course')
+        $reviews = Review::with(['course', 'semester'])
             ->orderBy('created_at', 'DESC')
             ->limit(30)
             ->get();

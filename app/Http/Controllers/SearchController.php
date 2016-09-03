@@ -2,22 +2,23 @@
 
 namespace CityUGE\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use CityUGE\Http\Requests;
-use CityUGE\Entities\Department;
 use CityUGE\Entities\Category;
+use CityUGE\Entities\Department;
 use CityUGE\Entities\Filter;
+use CityUGE\Semester;
+use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
     public function index()
     {
-        $departments = Department::all()->sortBy('initial');
-        $categories = Category::all()->sortBy('title_en');
+        $departments = Department::orderBy('initial')->get();
+        $categories = Category::orderBy('slug')->get();
+        $semesters = Semester::orderBy('id', 'DESC')->get();
         return view('main.search.index', [
             'departments' => $departments,
-            'categories' => $categories
+            'categories' => $categories,
+            'semesters' => $semesters,
         ]);
     }
 
