@@ -2,6 +2,7 @@
 
 namespace CityUGE\Entities;
 
+use CityUGE\Semester;
 use Illuminate\Database\Eloquent\Model;
 
 class Course extends Model
@@ -33,13 +34,13 @@ class Course extends Model
         return $this->hasMany(Review::class);
     }
 
-    public function stats()
+    public function aimsStats()
     {
         return $this->hasMany(AimsStats::class);
     }
 
-    public function offerings()
+    public function semesters()
     {
-        return $this->hasMany(Offering::class);
+        return $this->belongsToMany(Semester::class, 'offerings');
     }
 }
