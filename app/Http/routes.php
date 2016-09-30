@@ -28,6 +28,8 @@ Route::get('departments/{department}', ['as' => 'departments.courses', 'uses' =>
 
 // Reviews
 Route::get('reviews', ['as' => 'reviews.index', 'uses' => 'ReviewController@index']);
+Route::get('courses/{course}/reviews/create', ['as' => 'reviews.create', 'uses' => 'ReviewController@create']);
+Route::post('reviews/store', ['as' => 'reviews.store', 'uses' => 'ReviewController@store']);
 Route::get('reviews/{review}', ['as' => 'reviews.show', 'uses' => 'ReviewController@show']);
 
 // Atom feed

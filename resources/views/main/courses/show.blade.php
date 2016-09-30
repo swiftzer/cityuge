@@ -55,6 +55,11 @@
     @endif
 
     <hr>
+
+    <a href="{{ route('reviews.create', ['course' => strtolower($course->course_code)]) }}" class="btn btn-default" type="button">
+      Write Review
+    </a>
+
     <h2>Reviews</h2>
 
     @if($reviews->total() == 0)

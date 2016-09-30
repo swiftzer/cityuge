@@ -5,7 +5,7 @@ namespace CityUGE\Http\Controllers;
 use CityUGE\Entities\Category;
 use CityUGE\Entities\Department;
 use CityUGE\Entities\Filter;
-use CityUGE\Semester;
+use CityUGE\Entities\Semester;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller

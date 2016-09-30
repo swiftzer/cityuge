@@ -5,7 +5,7 @@ namespace CityUGE\Http\Controllers;
 use CityUGE\Entities\Category;
 use CityUGE\Entities\Course;
 use CityUGE\Entities\Review;
-use CityUGE\Semester;
+use CityUGE\Entities\Semester;
 
 class CourseController extends Controller
 {
