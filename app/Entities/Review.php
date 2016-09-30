@@ -2,7 +2,7 @@
 
 namespace CityUGE\Entities;
 
-use CityUGE\Semester;
+use CityUGE\Entities\Semester;
 use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model

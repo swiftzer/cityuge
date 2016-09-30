@@ -1,6 +1,6 @@
 <?php
 
-namespace CityUGE;
+namespace CityUGE\Entities;
 
 use CityUGE\Entities\AimsStats;
 use CityUGE\Entities\Course;
