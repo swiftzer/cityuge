@@ -8,6 +8,24 @@ Homestead.json
 
 composer.lock
 
+### Node ###
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
 ### OSX ###
 .DS_Store
 .AppleDouble
