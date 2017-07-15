@@ -33,9 +33,10 @@
                 <li><a href="{{ route('feed') }}">Feed</a></li>
             </ul>
             
-            <form class="navbar-form navbar-right" role="search">
+            <form method="GET" action="{{ route('search.results') }}" accept-charset="UTF-8" class="navbar-form navbar-right" role="search">
+                <input type="hidden" name="page" value="1">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Course code or title">
+                    <input type="text" name="keyword" class="form-control" placeholder="Course code or title">
                 </div>
                 <button type="submit" class="btn btn-default">Submit</button>
             </form>
