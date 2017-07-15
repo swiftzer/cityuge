@@ -24,27 +24,12 @@ class CourseController extends Controller
 
     public function category(Category $category, Semester $semester = null)
     {
-        // Alternative query
-//        $query = DB::table('courses')
-//            ->join('category_course', 'courses.id', '=', 'category_course.course_id')
-//            ->join('categories', 'category_course.category_id', '=', 'categories.id');
-//        if (!is_null($semester)) {
-//            $query->join('offerings', 'courses.id', '=', 'offerings.course_id')
-//                ->join('semesters', 'offerings.semester_id', '=', 'semesters.id');
-//        }
-//        $query->where('categories.slug', $category->slug);
-//        if (!is_null($semester)) {
-//            $query->where('semesters.semester', $semester->semester);
-//        }
-//        $courses = $query->orderBy('course_code')
-//            ->paginate(30);
-
         $query = Course::with('department')
             ->whereHas('categories', function ($q) use ($category) {
                 $q->where('slug', $category->slug);
             });
-        if (!is_null($semester)) {
-            $query->whereHas('semesters', function ($q) use ($semester) {
+        if (!is_null($semester) && !is_null($semester->semester)) {
+            $query = $query->whereHas('semesters', function ($q) use ($semester) {
                 $q->where('semester', $semester->semester);
             });
         }
