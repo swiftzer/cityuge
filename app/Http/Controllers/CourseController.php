@@ -35,7 +35,8 @@ class CourseController extends Controller
         }
         $courses = $query->orderBy('course_code')
             ->paginate(30);
-        return view('main.courses.index', ['courses' => $courses]);
+        $semesters = Semester::orderBy('ended_at', 'desc')->get();
+        return view('main.courses.index', ['courses' => $courses, 'category' => $category, 'semesters' => $semesters]);
     }
 
     /**

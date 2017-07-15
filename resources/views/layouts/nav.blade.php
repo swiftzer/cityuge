@@ -19,12 +19,12 @@
                         <li><a href="{{ route('departments.index') }}">Academic units</a></li>
                         <li><a href="#">Statistics</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">Area 1</a></li>
-                        <li><a href="#">Area 2</a></li>
-                        <li><a href="#">Area 3</a></li>
-                        <li><a href="#">University Requirements</a></li>
+                        <li><a href="{{ route('courses.category', ['category' => 'area-1']) }}">Area 1</a></li>
+                        <li><a href="{{ route('courses.category', ['category' => 'area-2']) }}">Area 2</a></li>
+                        <li><a href="{{ route('courses.category', ['category' => 'area-3']) }}">Area 3</a></li>
+                        <li><a href="{{ route('courses.category', ['category' => 'university-requirements']) }}">University Requirements</a></li>
                         <li role="separator" class="divider"></li>
-                        <li><a href="#">Foundation</a></li>
+                        <li><a href="{{ route('courses.category', ['category' => 'foundation']) }}">Foundation</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="{{ route('search.index') }}">Advanced search</a></li>
                     </ul>

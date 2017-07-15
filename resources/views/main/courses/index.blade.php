@@ -4,6 +4,20 @@
   <div class="container">
     <h1>Courses</h1>
 
+    <div class="dropdown">
+      <div class="btn-group">
+        <button type="button" id="semester-dropdown-menu" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+          學期 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" role="menu" aria-labelledby="semester-dropdown-menu">
+          <li><a href="{{ route('courses.category', ['category' => $category]) }}">所有學期</a></li>
+          @foreach($semesters as $semester)
+          <li><a href="{{ route('courses.category', ['category' => $category, 'semester' => $semester]) }}">{{ $semester->title }}</a></li>
+          @endforeach
+        </ul>
+      </div>
+    </div>
+
     @if($courses->total() == 0)
       <p>No courses</p>
     @else
