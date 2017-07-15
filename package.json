@@ -6,8 +6,9 @@
   "dependencies": {
     "babel-preset-es2015": "^6.9.0",
     "babel-preset-react": "^6.11.1",
-    "bootstrap-sass": "^3.0.0",
+    "bootstrap-sass": "^3.3.7",
     "jquery": "^2.0.0",
-    "laravel-elixir": "^4.0.0"
+    "laravel-elixir": "^4.0.0",
+    "node-sass": "^4.5.3"
   }
 }
