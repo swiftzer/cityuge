@@ -17,6 +17,7 @@ Route::get('/', ['as' => 'home', 'uses' => 'HomeController@index']);
 Route::get('courses', ['as' => 'courses.index', 'uses' => 'CourseController@index']);
 Route::get('courses/categories/{category}/{semester?}', ['as' => 'courses.category', 'uses' => 'CourseController@category']);
 Route::get('courses/{course}', ['as' => 'courses.show', 'uses' => 'CourseController@show']);
+Route::get('api/search_courses', ['as' => 'courses.search_courses', 'uses' => 'CourseController@search_courses']);
 
 // Search
 Route::get('search', ['as' => 'search.index', 'uses' => 'SearchController@index']);
