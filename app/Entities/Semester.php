@@ -2,9 +2,6 @@
 
 namespace CityUGE\Entities;
 
-use CityUGE\Entities\AimsStats;
-use CityUGE\Entities\Course;
-use CityUGE\Entities\Review;
 use CityUGE\Entities\Scopes\IsEnabledScope;
 use Illuminate\Database\Eloquent\Model;
 
@@ -39,10 +36,5 @@ class Semester extends Model
     public function reviews()
     {
         return $this->hasMany(Review::class);
-    }
-
-    public function aimsStats()
-    {
-        return $this->hasMany(AimsStats::class);
     }
 }

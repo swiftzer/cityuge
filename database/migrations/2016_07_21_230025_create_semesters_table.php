@@ -24,9 +24,6 @@ class CreateSemestersTable extends Migration
             $table->timestamp('promo_ended_at')->index();
             $table->timestamp('grade_released_from')->nullable();
         });
-        Schema::table('course_aims_stats', function ($table) {
-            $table->foreign('semester_id')->references('id')->on('semesters')->onUpdate('cascade')->onDelete('cascade');
-        });
         Schema::table('offerings', function ($table) {
             $table->foreign('semester_id')->references('id')->on('semesters')->onUpdate('cascade')->onDelete('cascade');
         });
@@ -42,9 +39,6 @@ class CreateSemestersTable extends Migration
      */
     public function down()
     {
-        Schema::table('course_aims_stats', function ($table) {
-            $table->dropForeign('course_aims_stats_semester_id_foreign');
-        });
         Schema::table('offerings', function ($table) {
             $table->dropForeign('offerings_semester_id_foreign');
         });
