@@ -19,7 +19,12 @@ class CourseController extends Controller
             ->orderBy('course_code')
             ->paginate(30);
 
-        return view('main.courses.index', ['courses' => $courses]);
+        $data = [
+            'courses' => $courses,
+            'category' => null,
+            'semesters' => null,
+        ];
+        return view('main.courses.index', $data);
     }
 
     public function category(Category $category, Semester $semester = null)
@@ -36,7 +41,13 @@ class CourseController extends Controller
         $courses = $query->orderBy('course_code')
             ->paginate(30);
         $semesters = Semester::orderBy('ended_at', 'desc')->get();
-        return view('main.courses.index', ['courses' => $courses, 'category' => $category, 'semesters' => $semesters]);
+
+        $data = [
+            'courses' => $courses,
+            'category' => $category,
+            'semesters' => $semesters,
+        ];
+        return view('main.courses.index', $data);
     }
 
     /**
