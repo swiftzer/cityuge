@@ -32,10 +32,10 @@
                 <li><a href="{{ route('reviews.index') }}">Reviews</a></li>
                 <li><a href="{{ route('feed') }}">Feed</a></li>
             </ul>
-            
+
             <form class="navbar-form navbar-right" role="search">
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Course code or title">
+                    <select class="course-search" style="width:200px;"></select>
                 </div>
                 <button type="submit" class="btn btn-default">Submit</button>
             </form>
