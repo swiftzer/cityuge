@@ -1,0 +1,29 @@
+// overwrite select2 css
+.select2-selection__arrow {
+  display: none;
+}
+.select2-dropdown {
+  border: none;
+  background: transparent;
+  input {
+    border: 1px solid #aaa;
+    border-radius: 5px;
+    height: 29px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    &:focus {
+      outline: 0;
+    }
+  }
+}
+.select2-results {
+  border: 1px solid #aaa;
+  background: #fff;
+}
+.select2-search {
+  padding: 0;
+  border: none;
+}
+body>.select2-container {
+  margin-top: -28px;
+}
