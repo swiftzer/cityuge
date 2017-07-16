@@ -1,4 +1,4 @@
-From php:5.5-fpm
+From php:5.6-fpm
 
 # Install php-required packages
 RUN apt-get update && apt-get install -y \
