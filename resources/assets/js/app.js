@@ -6,6 +6,9 @@ $('#course-quick-search').select2({
     ajax: {
         url: "/search/autocomplete",
         cache: true,
+        delay: 200
     },
     placeholder: 'Course code or title'
+}).on('select2:select', function(event){
+    window.location.href = event.params.data.url;
 });

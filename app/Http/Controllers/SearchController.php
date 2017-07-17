@@ -31,7 +31,8 @@ class SearchController extends Controller
         ->get())->map(function ($course) {
             return [
                 'id' => $course->course_code,
-                'text' => $course->title_en
+                'text' => $course->title_en,
+                'url' => route('courses.show', ['course' => $course->course_code])
             ];
         });
         return response()->json(['results' => $result]);
