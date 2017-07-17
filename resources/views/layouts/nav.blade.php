@@ -34,7 +34,7 @@
             </ul>
             <form class="navbar-form navbar-right" role="search">
                 <div class="form-group">
-                    <select class="course-search" style="width:200px;"></select>
+                    <select id="course-quick-search" class="course-search" style="width:200px;"></select>
                 </div>
                 <button type="submit" class="btn btn-default">Submit</button>
             </form>

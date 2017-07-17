@@ -71,35 +71,4 @@ class CourseController extends Controller
         ];
         return view('main.courses.show', $data);
     }
-
-    public function search_courses(Request $request)
-    {
-        $result = [];
-        $query = [];
-        if ($request->has('q')) {
-            $str = $request->has('q');
-            $query = Course::where('course_code', 'like', "%${str}%")
-                ->orWhere('title_en', 'like', "%${str}%")
-                ->orWhere('title_zh', 'like', "%${str}%")
-                ->orderBy('course_code', 'ASC')
-                ->limit(8)
-                ->get()
-                ->toArray();
-        } else {
-            $query = Course::orderBy('course_code', 'ASC')
-                ->limit(8)
-                ->get()
-                ->toArray();
-        }
-
-        $result = array_map(function($course) {
-            return [
-                'id' => $course['course_code'],
-                'text' => $course['title_en'],
-            ];
-        }, $query);
-
-        return response()
-            ->json(['results' => $result]);
-    }
 }

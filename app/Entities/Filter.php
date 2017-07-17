@@ -2,7 +2,6 @@
 
 namespace CityUGE\Entities;
 
-
 use Illuminate\Support\Facades\DB;
 
 class Filter
