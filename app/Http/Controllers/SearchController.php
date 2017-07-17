@@ -22,6 +22,22 @@ class SearchController extends Controller
         ]);
     }
 
+    public function autocomplete(Request $request)
+    {
+        $filter = new Filter($request->query());
+        $result = collect($filter->getQueryBuilder()
+        ->orderBy('course_code', 'ASC')
+        ->limit(8)
+        ->get())->map(function ($course) {
+            return [
+                'id' => $course->course_code,
+                'text' => $course->title_en,
+                'url' => route('courses.show', ['course' => $course->course_code])
+            ];
+        });
+        return response()->json(['results' => $result]);
+    }
+
     public function results(Request $request)
     {
         $filter = new Filter($request->query());

@@ -9,6 +9,7 @@
     "bootstrap-sass": "^3.3.7",
     "jquery": "^2.0.0",
     "laravel-elixir": "^4.0.0",
-    "node-sass": "^4.5.3"
+    "node-sass": "^4.5.3",
+    "select2": "^4.0.3"
   }
 }

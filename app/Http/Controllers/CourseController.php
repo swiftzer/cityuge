@@ -6,6 +6,7 @@ use CityUGE\Entities\Category;
 use CityUGE\Entities\Course;
 use CityUGE\Entities\Review;
 use CityUGE\Entities\Semester;
+use Illuminate\Http\Request;
 
 class CourseController extends Controller
 {

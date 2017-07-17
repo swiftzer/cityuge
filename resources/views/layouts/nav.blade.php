@@ -32,11 +32,9 @@
                 <li><a href="{{ route('reviews.index') }}">Reviews</a></li>
                 <li><a href="{{ route('feed') }}">Feed</a></li>
             </ul>
-            
-            <form method="GET" action="{{ route('search.results') }}" accept-charset="UTF-8" class="navbar-form navbar-right" role="search">
-                <input type="hidden" name="page" value="1">
+            <form class="navbar-form navbar-right" role="search">
                 <div class="form-group">
-                    <input type="text" name="keyword" class="form-control" placeholder="Course code or title">
+                    <select id="course-quick-search" class="course-search" style="width:200px;"></select>
                 </div>
                 <button type="submit" class="btn btn-default">Submit</button>
             </form>

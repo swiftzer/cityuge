@@ -20,6 +20,7 @@ Route::get('courses/{course}', ['as' => 'courses.show', 'uses' => 'CourseControl
 
 // Search
 Route::get('search', ['as' => 'search.index', 'uses' => 'SearchController@index']);
+Route::get('search/autocomplete', ['as' => 'search.autocomplete', 'uses' => 'SearchController@autocomplete']);
 Route::get('search/results', ['as' => 'search.results', 'uses' => 'SearchController@results']);
 
 // Departments
