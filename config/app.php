@@ -154,6 +154,7 @@ return [
         CityUGE\Providers\AuthServiceProvider::class,
         CityUGE\Providers\EventServiceProvider::class,
         CityUGE\Providers\RouteServiceProvider::class,
+        Mcamara\LaravelLocalization\LaravelLocalizationServiceProvider::class,
 
     ],
 
@@ -202,6 +203,8 @@ return [
         'View'      => Illuminate\Support\Facades\View::class,
 
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
+
+        'LaravelLocalization' => Mcamara\LaravelLocalization\Facades\LaravelLocalization::class,
 
     ],
 
