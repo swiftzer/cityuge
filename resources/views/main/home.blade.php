@@ -2,6 +2,6 @@
 
 @section('content')
   <div class="container">
-    <p>This is the home page!</p>
+    <p>@lang('index.home-page-str')</p>
   </div>
 @endsection
