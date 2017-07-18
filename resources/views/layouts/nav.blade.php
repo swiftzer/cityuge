@@ -17,7 +17,7 @@
                     <ul class="dropdown-menu">
                         <li><a href="{{ route('courses.index') }}">All Courses</a></li>
                         <li><a href="{{ route('departments.index') }}">Academic units</a></li>
-                        <li><a href="#">Statistics</a></li>
+                        <li><a href="{{ route('stats.index') }}">Statistics</a></li>
                         <li role="separator" class="divider"></li>
                         <li><a href="{{ route('courses.category', ['category' => 'area-1']) }}">Area 1</a></li>
                         <li><a href="{{ route('courses.category', ['category' => 'area-2']) }}">Area 2</a></li>
