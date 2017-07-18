@@ -14,8 +14,8 @@
     "location": {
         "@context": "http://schema.org/",
         "@type": "schema:Place",
-        "name": "City University Of Hong Kong",
-        "address": "63 Wing Tai Road"        
+        "name": "City University of Hong Kong",
+        "address": "83 Tat Chee Avenue, Kowloon Tong, Kowloon, Hong Kong"
     },
     "name": "{{ $course->title_en }}"
   }
