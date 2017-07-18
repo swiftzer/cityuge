@@ -89,4 +89,6 @@
       {!! $reviews->links() !!}
     @endif
   </div>
+
+  @include('schema.course', ['course' => $course])
 @endsection

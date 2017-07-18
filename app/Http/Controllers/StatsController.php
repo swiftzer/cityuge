@@ -24,6 +24,7 @@ class StatsController extends Controller
         $heavyWorkloadCourses = $categories->map(function ($category) {
             return $this->getHeavyWorkloadCourses($category->courses, 10);
         });
+
         $data = [
             'hotCourses' => $hotCourses,
             'goodGradeCourses' => $goodGradeCourses,
@@ -31,7 +32,6 @@ class StatsController extends Controller
             'lightWorkloadCourses' => $lightWorkloadCourses,
             'heavyWorkloadCourses' => $heavyWorkloadCourses,
         ];
-//        dd($data);
         return view('main.stats.index', $data);
     }
 
