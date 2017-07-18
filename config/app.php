@@ -155,6 +155,10 @@ return [
         CityUGE\Providers\EventServiceProvider::class,
         CityUGE\Providers\RouteServiceProvider::class,
 
+        /*
+         * Generator Service Provider
+         */
+        \Yish\Generators\GeneratorsServiceProvider::class,
     ],
 
     /*
