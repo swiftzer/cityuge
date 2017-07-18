@@ -2,12 +2,7 @@
 
 namespace CityUGE\Http\Controllers;
 
-use Illuminate\Http\Request;
-
-use CityUGE\Http\Requests;
-use CityUGE\Entities\Course;
 use CityUGE\Entities\Category;
-use DB;
 
 class StatsController extends Controller
 {
@@ -29,35 +24,44 @@ class StatsController extends Controller
         $heavyWorkloadCourses = $categories->map(function ($category) {
             return $this->getHeavyWorkloadCourses($category->courses, 10);
         });
+        $data = [
+            'hotCourses' => $hotCourses,
+            'goodGradeCourses' => $goodGradeCourses,
+            'badGradeCourses' => $badGradeCourses,
+            'lightWorkloadCourses' => $lightWorkloadCourses,
+            'heavyWorkloadCourses' => $heavyWorkloadCourses,
+        ];
+//        dd($data);
+        return view('main.stats.index', $data);
     }
 
-    private function getHotCourses($courses, int $itemsCount)
+    private function getHotCourses($courses, $itemsCount)
     {
         return $courses->sortByDesc('total_comments')->take($itemsCount);
     }
 
-    private function getGoodGradeCourses($courses, int $itemCount)
+    private function getGoodGradeCourses($courses, $itemCount)
     {
         return $courses->filter(function ($course) {
             return $course->bayesian_gp >= 3.3;
         })->sortByDesc('bayesian_gp')->take($itemCount);
     }
 
-    private function getBadGradeCourses($courses, int $itemCount)
+    private function getBadGradeCourses($courses, $itemCount)
     {
         return $courses->filter(function ($course) {
             return $course->bayesian_gp < 3 && $course->bayesian_gp > 0;
         })->sortByDesc('bayesian_gp')->take($itemCount);
     }
 
-    private function getLightWorkloadCourses($courses, int $itemCount)
+    private function getLightWorkloadCourses($courses, $itemCount)
     {
         return $courses->filter(function ($course) {
             return $course->bayesian_workload <= 2.7 && $course->bayesian_workload > 0;
         })->sortBy('bayesian_gp')->take($itemCount);
     }
 
-    private function getHeavyWorkloadCourses($courses, int $itemCount)
+    private function getHeavyWorkloadCourses($courses, $itemCount)
     {
         return $courses->filter(function ($course) {
             return $course->bayesian_workload >= 3.3;
