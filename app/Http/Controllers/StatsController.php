@@ -29,7 +29,6 @@ class StatsController extends Controller
         $heavyWorkloadCourses = $categories->map(function ($category) {
             return $this->getHeavyWorkloadCourses($category->courses, 10);
         });
-        dd($hotCourses);
     }
 
     private function getHotCourses($courses, int $itemsCount)
