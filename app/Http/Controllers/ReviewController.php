@@ -1,12 +1,12 @@
 <?php
+
 namespace CityUGE\Http\Controllers;
 
 use Carbon\Carbon;
-use CityUGE\Entities\Review;
 use CityUGE\Entities\Course;
+use CityUGE\Entities\Review;
 use CityUGE\Entities\Semester;
-
-use Symfony\Component\HttpFoundation\Request;
+use Illuminate\Http\Request;
 
 class ReviewController extends Controller
 {
@@ -52,11 +52,21 @@ class ReviewController extends Controller
         return view('main.reviews.create', [
             'course' => $course,
             'semesters' => Semester::all(),
+            'recaptchaSiteKey' => env('RECAPTCHA_SITE_KEY')
         ]);
     }
 
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'semester' => 'required', // TODO: check DB offering table
+            'instructor' => 'required|min:2|max:100',
+            'grade' => 'required|in:A+,A,A-,B+,B,B-,C+,C,C-,D,F,X',
+            'workload' => 'required|integer|between:1,5',
+            'body' => 'required|between:10,3000',
+            'g-recaptcha-response' => 'required|recaptcha',
+        ]);
+
         $instructor = $request->input('instructor');
         $grade = $request->input('grade');
         $workload = $request->input('workload');
@@ -66,8 +76,7 @@ class ReviewController extends Controller
 
         $course = Course::where('course_code', $courseCode)->first();
         $semester = Semester::where('semester', $request->input('semester'))->first();
-        if(is_null($course) || is_null($semester))
-        {
+        if (is_null($course) || is_null($semester)) {
             abort(500);
         }
 

@@ -7,11 +7,12 @@
   <title>CityU GE Guide</title>
   <link rel="stylesheet" href="{{ asset('css/app.css') }}">
   <link rel="alternate" href="{{ route('feed') }}" title="CityU GE Guide - Latest reviews" type="application/atom+xml">
+  @stack('headScripts')
 </head>
 <body>
 @include('layouts.nav')
 @yield('content')
 <script src="{{ asset('js/app.js') }}"></script>
-@stack('scripts')
+@stack('bodyScripts')
 </body>
 </html>
