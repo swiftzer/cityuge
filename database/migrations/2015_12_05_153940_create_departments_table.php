@@ -19,6 +19,8 @@ class CreateDepartmentsTable extends Migration
             $table->string('title_en', 100);
             $table->string('title_zh', 100);
             $table->string('url', 200);
+            $table->string('aims_initial', 8)->unique();
+            $table->string('aims_title', 100);
         });
         Schema::table('courses', function ($table) {
             $table->foreign('department_id')->references('id')->on('departments')->onUpdate('cascade')->onDelete('cascade');
