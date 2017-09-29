@@ -24,6 +24,8 @@ class CreateReviewsTable extends Migration
             $table->text('body');
             $table->text('admin_note')->nullable();
             $table->string('ipv4', 15);
+            $table->string('eid', 32)->nullable();
+            $table->timestamp('verified_at')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
