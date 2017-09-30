@@ -41,7 +41,6 @@ class AppServiceProvider extends ServiceProvider
     {
         if ($this->app->environment() === 'local') {
             $this->app->register('Barryvdh\Debugbar\ServiceProvider');
-            $this->app->register('Yish\Generators\GeneratorsServiceProvider');
         }
     }
 }
