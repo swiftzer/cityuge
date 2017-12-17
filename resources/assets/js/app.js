@@ -12,3 +12,4 @@ $('#course-quick-search').select2({
 }).on('select2:select', function(event){
     window.location.href = event.params.data.url;
 });
+$('.select2').select2();
