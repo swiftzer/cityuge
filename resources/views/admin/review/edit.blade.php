@@ -2,11 +2,10 @@
 
 @section('content')
 <div class="container">
-  <form class="form-horizontal" role="form" method="POST" action="{{ url('/login') }}">
+  <form class="form-horizontal" role="form" method="POST">
     {{ csrf_field() }}
     <div class="row">
       <div class="col-md-3">ID: {{ $review->id }}</div>
-      <div class="col-md-3">ipv4: {{ $review->ipv4 }}</div>
     </div>
     <div class="row">
       <div class="col-md-2">Course</div>
@@ -52,7 +51,10 @@
       <div class="col-md-2">admin_note</div>
       <div class="col-md-10"><input type="text" value="{{ $review->admin_note }}" name="admin_note" class="form-control"/></div>
     </div>
-    <div class="row"><input type="submit" value="submit" class="btn btn-primary"/></div>
+    <div class="row">
+      <div class="col-md-2"></div>
+      <div class="col-md-10"><input type="submit" value="Save" class="btn btn-primary"/></div>
+    </div>
   </form>
 
 </div>

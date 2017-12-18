@@ -56,5 +56,6 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth' ], function () {
     Route::get('/', ['as' => 'admin.index','uses' => 'Admin\HomeController@index']);
     Route::get('/reviews', ['as' => 'admin.review.index','uses' => 'Admin\ReviewController@index']);
     Route::get('/reviews/edit/{id}', ['as' => 'admin.review.edit','uses' => 'Admin\ReviewController@edit']);
+    Route::post('/reviews/edit/{id}', ['as' => 'admin.review.edit','uses' => 'Admin\ReviewController@edit']);
 
 });
