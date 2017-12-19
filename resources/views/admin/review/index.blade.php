@@ -6,6 +6,7 @@
     <div class="panel-heading">Filter</div>
     <div class="panel-body">
       <form class="form-horizontal" role="form" method="GET">
+        {{ csrf_field() }}
         <div class="row">
           <div class="col-md-2">Keyword</div>
           <div class="col-md-10"><input name="keyword" type="text" class="form-control"/></div>
@@ -31,6 +32,12 @@
           </div>
         </div>
         <div class="row">
+          <div class="col-md-2">with_trashed</div>
+          <div class="col-md-10">
+            <input type="checkbox" name="with_trashed" />
+          </div>
+        </div>
+        <div class="row">
           <div class="col-md-2"></div>
           <div class="col-md-10"><input type="submit" class="btn btn-primary" value="Search"/></div>
         </div>
@@ -51,7 +58,7 @@
         </thead>
         <tbody>
           @forelse($reviews as $review)
-          <tr scope="row">
+          <tr scope="row" class="{{ $review->deleted_at ? 'deleted' : ''}}">
             <td>{{ $review->id }}</td>
             <td>
               <table class="table table-sm">
@@ -79,13 +86,25 @@
             </td>
             <td>
               <a href="{{ route('admin.review.edit', $review->id) }}" class="btn btn-default">Edit</a>
-              <form action="{{ route('admin.review.index', $review->id) }}" method="POST"
-                style="display: inline"
-                onsubmit="return confirm('Are you sure?');">
-                <input type="hidden" name="_method" value="DELETE">
-                {{ csrf_field() }}
-                <button class="btn btn-danger">Delete</button>
-              </form>
+              @if (!$review->deleted_at)
+                <form action="{{ route('admin.review.delete', $review->id) }}" method="POST"
+                  style="display: inline"
+                  onsubmit="var adminNote = prompt('Reason:'); $('#deleteNote').val(adminNote); return true;">
+                  <input type="hidden" name="admin_note" id="deleteNote">
+                  <input type="hidden" name="_method" value="DELETE">
+                  {{ csrf_field() }}
+                  <button class="btn btn-danger">Delete</button>
+                </form>
+              @else
+                <form action="{{ route('admin.review.restore', $review->id) }}" method="POST"
+                  style="display: inline"
+                  onsubmit="var adminNote = prompt('Reason:'); $('#restoreNote').val(adminNote); return true;">
+                  <input type="hidden" name="admin_note" id="restoreNote">
+                  <input type="hidden" name="_method" value="PUT">
+                  {{ csrf_field() }}
+                  <button class="btn btn-danger">Restore</button>
+                </form>
+              @endif
             </td>
           </tr>
           @empty

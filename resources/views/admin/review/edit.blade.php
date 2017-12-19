@@ -61,7 +61,9 @@
           <div class="col-md-10"><input type="text" value="{{ $review->admin_note }}" name="admin_note" class="form-control"/></div>
         </div>
         <div class="row">
-          <div class="col-md-2"></div>
+          <div class="col-md-2">
+            <input type="hidden" name="_method" value="PUT">
+          </div>
           <div class="col-md-10"><input type="submit" value="Save" class="btn btn-primary"/></div>
         </div>
       </form>

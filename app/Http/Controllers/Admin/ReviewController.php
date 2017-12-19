@@ -22,7 +22,8 @@ class ReviewController extends Controller
         $query = $request->only(
             'course_id',
             'semester_id',
-            'keyword');
+            'keyword',
+            'with_trashed');
         if (!empty($query['course_id'])) {
             $queryBuilder->where('course_id', '=', $query['course_id']);
         }
@@ -31,6 +32,9 @@ class ReviewController extends Controller
         }
         if (!empty($query['keyword'])) {
             $queryBuilder->where('body', 'like', '%' . $query['keyword'] . '%');
+        }
+        if (empty($query['with_trashed']) || $query['with_trashed'] === false) {
+            $queryBuilder->whereNull('reviews.deleted_at');
         }
 
         $reviews = $queryBuilder->paginate(10);
@@ -49,7 +53,7 @@ class ReviewController extends Controller
     public function edit($id, Request $request)
     {
         $review = Review::findOrFail($id);
-        if ($request->isMethod('post')) {
+        if ($request->isMethod('put')) {
             $input = $request->only(
                 'course_id',
                 'semester_id',
@@ -69,7 +73,7 @@ class ReviewController extends Controller
             $review->admin_note = $input['admin_note'];
             $review->save();
 
-            $request->session()->flash('success', 'Task was successful!');
+            $request->session()->flash('success', "Review $id successfully updated");
             return redirect()->route('admin.review.edit', $id);
         }
         $courses = Course::select(DB::raw("CONCAT(course_code, ' - ', title_en) AS title"),'id')
@@ -83,6 +87,22 @@ class ReviewController extends Controller
             'courses' => $courses,
             'semesters' => $semesters,
         ]);
+    }
+    public function delete($id, Request $request) {
+        $review = Review::findOrFail($id);
+        $review->admin_note = $request->input('admin_note', null);
+        $review->save();
+        $review->delete();
+        $request->session()->flash('success', "Review $id successfully deleted");
+        return back();
+    }
+    public function restore($id, Request $request) {
+        $review = Review::withTrashed()->findOrFail($id);
+        $review->admin_note = $request->input('admin_note', null);
+        $review->save();
+        $review->restore();
+        $request->session()->flash('success', "Review $id successfully restored");
+        return back();
     }
 
 }
