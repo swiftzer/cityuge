@@ -37,4 +37,8 @@ class Semester extends Model
     {
         return $this->hasMany(Review::class);
     }
+    public static function getList()
+    {
+        return static::pluck('title','id')->toArray();
+    }
 }

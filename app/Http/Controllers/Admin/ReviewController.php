@@ -38,11 +38,8 @@ class ReviewController extends Controller
         }
 
         $reviews = $queryBuilder->paginate(10);
-        $courses = Course::select(DB::raw("CONCAT(course_code, ' - ', title_en) AS title"),'id')
-            ->get()
-            ->pluck('title','id')
-            ->toArray();
-        $semesters = Semester::pluck('title','id')->toArray();
+        $courses = Course::getList();
+        $semesters = Semester::getList();
         return view('admin.review.index', [
             'reviews' => $reviews,
             'query' => $request->query->all(),
@@ -76,11 +73,8 @@ class ReviewController extends Controller
             $request->session()->flash('success', "Review $id successfully updated");
             return redirect()->route('admin.review.edit', $id);
         }
-        $courses = Course::select(DB::raw("CONCAT(course_code, ' - ', title_en) AS title"),'id')
-            ->get()
-            ->pluck('title','id')
-            ->toArray();
-        $semesters = Semester::pluck('title','id')->toArray();
+        $courses = Course::getList();
+        $semesters = Semester::getList();
 
         return view('admin.review.edit', [
             'review' => $review,
