@@ -12,4 +12,11 @@ $('#course-quick-search').select2({
 }).on('select2:select', function(event){
     window.location.href = event.params.data.url;
 });
-$('.select2').select2();
+$('.select2').each(function() {
+    var options = {};
+    if ($(this).hasClass('prepend-all')) {
+        var newOption = new Option("All", "", true, true);
+        $(this).prepend(newOption);
+    }
+    $(this).select2(options);
+})

@@ -4,6 +4,8 @@ namespace CityUGE\Http\Controllers\Admin;
 use CityUGE\Http\Controllers\Controller;
 use CityUGE\Entities\Review;
 use CityUGE\Entities\Course;
+
+use CityUGE\Entities\Filter;
 use CityUGE\Entities\Semester;
 use DB;
 use Illuminate\Http\Request;
@@ -11,11 +13,38 @@ use Illuminate\Http\Request;
 class ReviewController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        // TODO: add filters
-        $reviews = Review::orderBy('created_at', 'desc')->paginate(10);
-        return view('admin.review.index', compact('reviews'));
+        $queryBuilder = DB::table('reviews')
+            ->leftJoin('courses', 'courses.id' , '=' , 'reviews.course_id')
+            ->leftJoin('semesters', 'semesters.id' , '=' , 'reviews.semester_id')
+            ->select('reviews.*', 'courses.course_code as course_code', 'courses.title_en as course_title_en' , 'semesters.title as semester_title');
+        $query = $request->only(
+            'course_id',
+            'semester_id',
+            'keyword');
+        if (!empty($query['course_id'])) {
+            $queryBuilder->where('course_id', '=', $query['course_id']);
+        }
+        if (!empty($query['semester_id'])) {
+            $queryBuilder->where('semester_id', '=', $query['semester_id']);
+        }
+        if (!empty($query['keyword'])) {
+            $queryBuilder->where('body', 'like', '%' . $query['keyword'] . '%');
+        }
+
+        $reviews = $queryBuilder->paginate(10);
+        $courses = Course::select(DB::raw("CONCAT(course_code, ' - ', title_en) AS title"),'id')
+            ->get()
+            ->pluck('title','id')
+            ->toArray();
+        $semesters = Semester::pluck('title','id')->toArray();
+        return view('admin.review.index', [
+            'reviews' => $reviews,
+            'query' => $request->query->all(),
+            'courses' => $courses,
+            'semesters' => $semesters,
+        ]);
     }
     public function edit($id, Request $request)
     {
@@ -39,11 +68,11 @@ class ReviewController extends Controller
             $review->body = $input['body'];
             $review->admin_note = $input['admin_note'];
             $review->save();
-            
+
             $request->session()->flash('success', 'Task was successful!');
             return redirect()->route('admin.review.edit', $id);
         }
-        $courses = Course::select(DB::raw("CONCAT(course_code, ' - ', title_en, ' ' , title_zh) AS title"),'id')
+        $courses = Course::select(DB::raw("CONCAT(course_code, ' - ', title_en) AS title"),'id')
             ->get()
             ->pluck('title','id')
             ->toArray();
