@@ -36,3 +36,22 @@ Route::get('reviews/{review}', ['as' => 'reviews.show', 'uses' => 'ReviewControl
 
 // Atom feed
 Route::get('feed', ['as' => 'feed', 'uses' => 'ReviewController@recentAtomFeed']);
+
+
+// Authentication Routes...
+Route::get('login', ['as' => 'login.index', 'uses' => 'Auth\AuthController@showLoginForm']);
+Route::post('login', ['as' => 'login.index', 'uses' => 'Auth\AuthController@login']);
+
+Route::get('logout', ['as' => 'logout', 'uses' => 'Auth\AuthController@logout']);
+
+// Registration Routes...
+// Route::get('register', ['as' => 'register.index', 'uses' => 'Auth\AuthController@showRegistrationForm']);
+// Route::post('register', ['as' => 'register.index', 'uses' => 'Auth\AuthController@register']);
+
+// Password Reset Routes...
+Route::get('password/reset/{token?}', ['as' => 'password.forgot', 'uses' => 'Auth\PasswordController@showResetForm']);
+Route::post('password/email', ['as' => 'feed', 'password.sendResetLinkEmail' => 'Auth\PasswordController@sendResetLinkEmail']);
+Route::post('password/reset', ['as' => 'feed', 'password.reset' => 'Auth\PasswordController@reset']);
+Route::group(['prefix' => 'admin', 'middleware' => 'auth' ], function () {
+    Route::get('/', ['as' => 'admin.index','uses' => 'Admin\HomeController@index']);
+});
