@@ -3,7 +3,7 @@
 namespace CityUGE\Entities;
 
 use Illuminate\Database\Eloquent\Model;
-
+use DB;
 class Course extends Model
 {
     protected $table = 'courses';
@@ -36,5 +36,12 @@ class Course extends Model
     public function semesters()
     {
         return $this->belongsToMany(Semester::class, 'offerings');
+    }
+    public static function getList()
+    {
+        return static::select(DB::raw("CONCAT(course_code, ' - ', title_en) AS title"),'id')
+            ->get()
+            ->pluck('title','id')
+            ->toArray();
     }
 }

@@ -54,4 +54,10 @@ Route::post('password/email', ['as' => 'feed', 'password.sendResetLinkEmail' => 
 Route::post('password/reset', ['as' => 'feed', 'password.reset' => 'Auth\PasswordController@reset']);
 Route::group(['prefix' => 'admin', 'middleware' => 'auth' ], function () {
     Route::get('/', ['as' => 'admin.index','uses' => 'Admin\HomeController@index']);
+    Route::get('/reviews', ['as' => 'admin.review.index','uses' => 'Admin\ReviewController@index']);
+    Route::get('/reviews/edit/{id}', ['as' => 'admin.review.edit','uses' => 'Admin\ReviewController@edit']);
+    Route::put('/reviews/edit/{id}', ['as' => 'admin.review.edit','uses' => 'Admin\ReviewController@edit']);
+    Route::delete('/reviews/{id}', ['as' => 'admin.review.delete','uses' => 'Admin\ReviewController@delete']);
+    Route::put('/reviews/restore/{id}', ['as' => 'admin.review.restore','uses' => 'Admin\ReviewController@restore']);
+
 });
