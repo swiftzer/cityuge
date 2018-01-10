@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @push('headScripts')
-<script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 @endpush
 
 @section('content')
@@ -22,9 +22,9 @@
       <div class="form-group">
         <label for="semester" class="col-sm-2 control-label">Semester</label>
         <div class="col-sm-10">
-          <select name="semester" class="form-control">
+          <select name="semester-id" class="form-control">
             @foreach($semesters as $semester)
-              <option value="{{$semester->semester}}">{{$semester->title}}</option>
+              <option value="{{ $semester->id }}">{{ $semester->title }}</option>
             @endforeach
           </select>
         </div>
@@ -69,12 +69,12 @@
         </div>
       </div>
       <div class="form-group">
-        <label for="content" class="col-sm-2 control-label">Content</label>
+        <label for="body" class="col-sm-2 control-label">Content</label>
         <div class="col-sm-10">
-          <textarea class="form-control" id="content" name="content" rows="6"></textarea>
+          <textarea class="form-control" id="body" name="body" rows="6"></textarea>
         </div>
       </div>
-      <input type="hidden" name="course_code" value="{{strtolower($course->course_code)}}">
+      <input type="hidden" name="course-id" value="{{ $course->id }}">
       <div class="form-group">
         <div class="col-sm-offset-2 col-sm-10">
           <button class="btn btn-default g-recaptcha" data-sitekey="{{ $recaptchaSiteKey }}"
@@ -88,9 +88,9 @@
 @endsection
 
 @push('bodyScripts')
-<script>
-  function onSubmit(token) {
-    document.getElementById("create-review-form").submit();
-  }
-</script>
+  <script>
+    function onSubmit(token) {
+      document.getElementById("create-review-form").submit();
+    }
+  </script>
 @endpush

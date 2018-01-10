@@ -5,8 +5,8 @@ namespace CityUGE\Http\Controllers;
 use Carbon\Carbon;
 use CityUGE\Entities\Course;
 use CityUGE\Entities\Review;
-use CityUGE\Entities\Semester;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReviewController extends Controller
 {
@@ -49,9 +49,10 @@ class ReviewController extends Controller
 
     public function create(Course $course)
     {
+        $semesters = $course->semesters()->orderBy('id', 'DESC')->get();
         return view('main.reviews.create', [
             'course' => $course,
-            'semesters' => Semester::all(),
+            'semesters' => $semesters,
             'recaptchaSiteKey' => env('RECAPTCHA_SITE_KEY')
         ]);
     }
@@ -59,7 +60,8 @@ class ReviewController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'semester' => 'required', // TODO: check DB offering table
+            'course-id' => 'required|exists:courses,id',
+            'semester-id' => 'required|exists:offerings,semester_id,course_id,' . $request->input('course-id'),
             'instructor' => 'required|min:2|max:100',
             'grade' => 'required|in:A+,A,A-,B+,B,B-,C+,C,C-,D,F,X',
             'workload' => 'required|integer|between:1,5',
@@ -67,32 +69,46 @@ class ReviewController extends Controller
             'g-recaptcha-response' => 'required|recaptcha',
         ]);
 
+        $semesterId = $request->input('semester-id');
         $instructor = $request->input('instructor');
         $grade = $request->input('grade');
         $workload = $request->input('workload');
-        $content = $request->input('content');
-        $courseCode = $request->input('course_code');
-        $ip = $request->ip();
-
-        $course = Course::where('course_code', $courseCode)->first();
-        $semester = Semester::where('semester', $request->input('semester'))->first();
-        if (is_null($course) || is_null($semester)) {
-            abort(500);
+        $body = $request->input('body');
+        $courseId = $request->input('course-id');
+        if (is_null($request->server('HTTP_CF_CONNECTING_IP'))) {
+            $ip = $request->ip();
+        } else {
+            $ip = $request->server('HTTP_CF_CONNECTING_IP');
         }
 
-        $review = new Review;
-        $review->course_id = $course->id;
-        $review->semester_id = $semester->id;
-        $review->instructor = $instructor;
-        $review->grade = $grade;
-        $review->gp = $this->getGradePoint($grade);
-        $review->workload = $workload;
-        $review->body = $content;
-        $review->ipv4 = $ip;
-        $review->save();
+        $courseCode = '';
+        DB::transaction(function () use (&$courseCode, $courseId, $semesterId, $instructor, $grade, $workload, $body, $ip) {
+            $course = Course::find($courseId);
+            $courseCode = $course->course_code;
+
+            if (is_null($course)) {
+                abort(500);
+            }
+
+            $review = new Review;
+            $review->course_id = $course->id;
+            $review->semester_id = $semesterId;
+            $review->instructor = $instructor;
+            $review->grade = $grade;
+            $review->gp = $this->getGradePoint($grade);
+            $review->workload = $workload;
+            $review->body = $body;
+            $review->ipv4 = $ip;
+            $review->save();
+
+            // TODO: Update courses table
+
+            // Update updated_at timestamp
+            $course->touch();
+        });
 
         return redirect()->route('courses.show', [
-            'course' => $course->course_code
+            'course' => strtolower($courseCode)
         ]);
     }
 
