@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CourseMetaTableSeeder::class);
         $this->call(OfferingsTableSeeder::class);
         $this->call(ReviewsTableSeeder::class);
+        $this->call(CourseStatsSeeder::class);
         $this->call(ReviewRemoveStockReasonsTableSeeder::class);
 
         Model::reguard();

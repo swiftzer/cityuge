@@ -37,7 +37,7 @@ class StatsController extends Controller
 
     private function getHotCourses($courses, $itemsCount)
     {
-        return $courses->sortByDesc('total_comments')->take($itemsCount);
+        return $courses->sortByDesc('total_reviews')->take($itemsCount);
     }
 
     private function getGoodGradeCourses($courses, $itemCount)
