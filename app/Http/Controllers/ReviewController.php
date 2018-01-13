@@ -5,8 +5,8 @@ namespace CityUGE\Http\Controllers;
 use Carbon\Carbon;
 use CityUGE\Entities\Course;
 use CityUGE\Entities\Review;
-use CityUGE\Entities\Semester;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReviewController extends Controller
 {
@@ -49,50 +49,106 @@ class ReviewController extends Controller
 
     public function create(Course $course)
     {
+        $semesters = $course->semesters()->orderBy('id', 'DESC')->get();
         return view('main.reviews.create', [
             'course' => $course,
-            'semesters' => Semester::all(),
+            'semesters' => $semesters,
             'recaptchaSiteKey' => env('RECAPTCHA_SITE_KEY')
         ]);
     }
 
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'semester' => 'required', // TODO: check DB offering table
-            'instructor' => 'required|min:2|max:100',
-            'grade' => 'required|in:A+,A,A-,B+,B,B-,C+,C,C-,D,F,X',
-            'workload' => 'required|integer|between:1,5',
-            'body' => 'required|between:10,3000',
-            'g-recaptcha-response' => 'required|recaptcha',
-        ]);
+        $courseCode = '';
+        DB::transaction(function () use ($request, &$courseCode) {
+            $this->validate($request, [
+                'course-id' => 'required|exists:courses,id',
+                'semester-id' => 'required|exists:offerings,semester_id,course_id,' . $request->input('course-id'),
+                'instructor' => 'required|min:2|max:100',
+                'grade' => 'required|in:A+,A,A-,B+,B,B-,C+,C,C-,D,F,X',
+                'workload' => 'required|integer|between:1,5',
+                'body' => 'required|between:10,3000',
+                'g-recaptcha-response' => 'required|recaptcha',
+            ]);
 
-        $instructor = $request->input('instructor');
-        $grade = $request->input('grade');
-        $workload = $request->input('workload');
-        $content = $request->input('content');
-        $courseCode = $request->input('course_code');
-        $ip = $request->ip();
+            $semesterId = $request->input('semester-id');
+            $instructor = $request->input('instructor');
+            $grade = $request->input('grade');
+            $workload = $request->input('workload');
+            $body = $request->input('body');
+            $courseId = $request->input('course-id');
+            if (is_null($request->server('HTTP_CF_CONNECTING_IP'))) {
+                $ip = $request->ip();
+            } else {
+                $ip = $request->server('HTTP_CF_CONNECTING_IP');
+            }
 
-        $course = Course::where('course_code', $courseCode)->first();
-        $semester = Semester::where('semester', $request->input('semester'))->first();
-        if (is_null($course) || is_null($semester)) {
-            abort(500);
-        }
+            $course = Course::find($courseId);
+            $courseCode = $course->course_code;
 
-        $review = new Review;
-        $review->course_id = $course->id;
-        $review->semester_id = $semester->id;
-        $review->instructor = $instructor;
-        $review->grade = $grade;
-        $review->gp = $this->getGradePoint($grade);
-        $review->workload = $workload;
-        $review->body = $content;
-        $review->ipv4 = $ip;
-        $review->save();
+            if (is_null($course)) {
+                abort(500);
+            }
+
+            $review = new Review;
+            $review->course_id = $course->id;
+            $review->semester_id = $semesterId;
+            $review->instructor = $instructor;
+            $review->grade = $grade;
+            $review->gp = $this->getGradePoint($grade);
+            $review->workload = $workload;
+            $review->body = trim($body);
+            $review->ipv4 = $ip;
+            $review->save();
+
+
+            // review counter
+            DB::update(<<<SQL
+UPDATE courses AS c
+  INNER JOIN (SELECT
+                course_id,
+                count(*) AS total_reviews
+              FROM reviews
+              WHERE course_id = ? AND deleted_at IS NULL) AS r ON c.id = r.course_id
+SET c.total_reviews = r.total_reviews
+WHERE c.id = ?
+SQL
+                , [$course->id, $course->id]);
+
+            // mean grade point
+            DB::update(<<<SQL
+UPDATE courses AS c
+  INNER JOIN (SELECT
+                course_id,
+                avg(gp) AS mean_gp
+              FROM reviews
+              WHERE course_id = ? AND deleted_at IS NULL AND reviews.grade <> 'X'
+              GROUP BY course_id) AS r ON c.id = r.course_id
+SET c.mean_gp = r.mean_gp
+WHERE c.id = ?
+SQL
+                , [$course->id, $course->id]);
+
+            // mean workload
+            DB::update(<<<SQL
+UPDATE courses AS c
+  INNER JOIN (SELECT
+                course_id,
+                avg(workload) AS mean_workload
+              FROM reviews
+              WHERE course_id = ? AND deleted_at IS NULL
+              GROUP BY course_id) AS r ON c.id = r.course_id
+SET c.mean_workload = r.mean_workload
+WHERE c.id = ?
+SQL
+                , [$course->id, $course->id]);
+            // Update updated_at timestamp, better use ORM to do this as the timezone can be controlled by the
+            // application instead of DB server
+            $course->touch();
+        });
 
         return redirect()->route('courses.show', [
-            'course' => $course->course_code
+            'course' => strtolower($courseCode)
         ]);
     }
 
