@@ -20,7 +20,7 @@ UPDATE courses AS course1
                  courses.id,
                  count(reviews.id) AS total_reviews
                FROM courses
-                 LEFT JOIN reviews ON courses.id = reviews.course_id
+                 LEFT JOIN reviews ON courses.id = reviews.course_id AND deleted_at IS NULL
                GROUP BY courses.id) AS course2 ON course1.id = course2.id
 SET course1.total_reviews = course2.total_reviews
 SQL
