@@ -59,30 +59,30 @@ class ReviewController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'course-id' => 'required|exists:courses,id',
-            'semester-id' => 'required|exists:offerings,semester_id,course_id,' . $request->input('course-id'),
-            'instructor' => 'required|min:2|max:100',
-            'grade' => 'required|in:A+,A,A-,B+,B,B-,C+,C,C-,D,F,X',
-            'workload' => 'required|integer|between:1,5',
-            'body' => 'required|between:10,3000',
-            'g-recaptcha-response' => 'required|recaptcha',
-        ]);
-
-        $semesterId = $request->input('semester-id');
-        $instructor = $request->input('instructor');
-        $grade = $request->input('grade');
-        $workload = $request->input('workload');
-        $body = $request->input('body');
-        $courseId = $request->input('course-id');
-        if (is_null($request->server('HTTP_CF_CONNECTING_IP'))) {
-            $ip = $request->ip();
-        } else {
-            $ip = $request->server('HTTP_CF_CONNECTING_IP');
-        }
-
         $courseCode = '';
-        DB::transaction(function () use (&$courseCode, $courseId, $semesterId, $instructor, $grade, $workload, $body, $ip) {
+        DB::transaction(function () use ($request, &$courseCode) {
+            $this->validate($request, [
+                'course-id' => 'required|exists:courses,id',
+                'semester-id' => 'required|exists:offerings,semester_id,course_id,' . $request->input('course-id'),
+                'instructor' => 'required|min:2|max:100',
+                'grade' => 'required|in:A+,A,A-,B+,B,B-,C+,C,C-,D,F,X',
+                'workload' => 'required|integer|between:1,5',
+                'body' => 'required|between:10,3000',
+                'g-recaptcha-response' => 'required|recaptcha',
+            ]);
+
+            $semesterId = $request->input('semester-id');
+            $instructor = $request->input('instructor');
+            $grade = $request->input('grade');
+            $workload = $request->input('workload');
+            $body = $request->input('body');
+            $courseId = $request->input('course-id');
+            if (is_null($request->server('HTTP_CF_CONNECTING_IP'))) {
+                $ip = $request->ip();
+            } else {
+                $ip = $request->server('HTTP_CF_CONNECTING_IP');
+            }
+
             $course = Course::find($courseId);
             $courseCode = $course->course_code;
 
@@ -97,13 +97,54 @@ class ReviewController extends Controller
             $review->grade = $grade;
             $review->gp = $this->getGradePoint($grade);
             $review->workload = $workload;
-            $review->body = $body;
+            $review->body = trim($body);
             $review->ipv4 = $ip;
             $review->save();
 
-            // TODO: Update courses table
 
-            // Update updated_at timestamp
+            // review counter
+            DB::update(<<<SQL
+UPDATE courses AS c
+  INNER JOIN (SELECT
+                course_id,
+                count(*) AS total_reviews
+              FROM reviews
+              WHERE course_id = :course_id AND deleted_at IS NULL) AS r ON c.id = r.course_id
+SET c.total_reviews = r.total_reviews
+WHERE c.id = :course_id
+SQL
+                , ['course_id' => $course->id]);
+
+            // mean grade point
+            DB::update(<<<SQL
+UPDATE courses AS c
+  INNER JOIN (SELECT
+                course_id,
+                avg(gp) AS mean_gp
+              FROM reviews
+              WHERE course_id = :course_id AND deleted_at IS NULL AND reviews.grade <> 'X'
+              GROUP BY course_id) AS r ON c.id = r.course_id
+SET c.mean_gp = r.mean_gp
+WHERE c.id = :course_id
+SQL
+                , ['course_id' => $course->id]);
+
+            // mean workload
+            DB::update(<<<SQL
+UPDATE courses AS c
+  INNER JOIN (SELECT
+                course_id,
+                avg(workload) AS mean_workload
+              FROM reviews
+              WHERE course_id = :course_id AND deleted_at IS NULL
+              GROUP BY course_id) AS r ON c.id = r.course_id
+SET c.mean_workload = r.mean_workload
+WHERE c.id = :course_id
+SQL
+                , ['course_id' => $course->id]);
+
+            // Update updated_at timestamp, better use ORM to do this as the timezone can be controlled by the
+            // application instead of DB server
             $course->touch();
         });
 
