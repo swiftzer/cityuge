@@ -109,11 +109,11 @@ UPDATE courses AS c
                 course_id,
                 count(*) AS total_reviews
               FROM reviews
-              WHERE course_id = :course_id AND deleted_at IS NULL) AS r ON c.id = r.course_id
+              WHERE course_id = ? AND deleted_at IS NULL) AS r ON c.id = r.course_id
 SET c.total_reviews = r.total_reviews
-WHERE c.id = :course_id
+WHERE c.id = ?
 SQL
-                , ['course_id' => $course->id]);
+                , [$course->id, $course->id]);
 
             // mean grade point
             DB::update(<<<SQL
@@ -122,12 +122,12 @@ UPDATE courses AS c
                 course_id,
                 avg(gp) AS mean_gp
               FROM reviews
-              WHERE course_id = :course_id AND deleted_at IS NULL AND reviews.grade <> 'X'
+              WHERE course_id = ? AND deleted_at IS NULL AND reviews.grade <> 'X'
               GROUP BY course_id) AS r ON c.id = r.course_id
 SET c.mean_gp = r.mean_gp
-WHERE c.id = :course_id
+WHERE c.id = ?
 SQL
-                , ['course_id' => $course->id]);
+                , [$course->id, $course->id]);
 
             // mean workload
             DB::update(<<<SQL
@@ -136,13 +136,12 @@ UPDATE courses AS c
                 course_id,
                 avg(workload) AS mean_workload
               FROM reviews
-              WHERE course_id = :course_id AND deleted_at IS NULL
+              WHERE course_id = ? AND deleted_at IS NULL
               GROUP BY course_id) AS r ON c.id = r.course_id
 SET c.mean_workload = r.mean_workload
-WHERE c.id = :course_id
+WHERE c.id = ?
 SQL
-                , ['course_id' => $course->id]);
-
+                , [$course->id, $course->id]);
             // Update updated_at timestamp, better use ORM to do this as the timezone can be controlled by the
             // application instead of DB server
             $course->touch();

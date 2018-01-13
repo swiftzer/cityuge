@@ -21,11 +21,14 @@
 
     <form id="create-review-form" class="form-horizontal" action="{{ route('reviews.store') }}" method="post">
       <div class="form-group">
-        <label for="semester" class="col-sm-2 control-label">Semester</label>
+        <label for="semester-id" class="col-sm-2 control-label">Semester</label>
         <div class="col-sm-10">
-          <select name="semester-id" class="form-control">
+          <select id="semester-id" name="semester-id" class="form-control">
+            <option value="">&nbsp;</option>
             @foreach($semesters as $semester)
-              <option value="{{ $semester->id }}" {{ old('semester-id') == $semester->id ? 'selected' : '' }}>{{ $semester->title }}</option>
+              <option value="{{ $semester->id }}" {{ old('semester-id') == $semester->id ? 'selected' : '' }}>
+                {{ $semester->title }}
+              </option>
             @endforeach
           </select>
         </div>
